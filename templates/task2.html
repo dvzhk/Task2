@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+ {% block title %}Задача 2 - Решение {% endblock %}
+
+
+{% block content %}
+<br>
+    <h2>Решение задачи</h2>
+<article>
+
+<strong>Загрузка и предобработка файла данных</strong>
+    <p>
+        Загружаем данные из файла, указывая, что данные находятся в первых трех столбцах, индекс находится в первом столбце; указываем символ-разделитель, используемый в файле(","), а также используемую кодировку (Windows-1251).
+
+    </p>
+    <p>Вид таблицы:</p>
+    <pre>{{ preview }}</pre>
+
+</article>
+<br>
+<article>
+    <strong>Составление объединенного списка участников</strong>
+
+<div class="accordion" id="accordionExample">
+    <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Общий список (первые 20 позиций)
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        <pre>
+        {{ preview_part_list }}
+        </pre>
+      </div>
+    </div>
+  </div>
+</div>
+    <p></p>
+
+
+</article>
+
+
+<article>
+    <strong>Поиск участников 2 и более ДТП</strong>
+    <p>Исходя из имеющихся данных можно предположить, что мошенники совершат более одного ДТП.
+    Составим список лиц, которые приняли участие в 2 и более ДТП:
+
+    </p>
+
+<pre> {{ more_than_one_time }} </pre>
+
+
+    <p>Предполагаемые мошенники могут содержаться в данном списке, однако также здесь скорее всего присутствуют и те, кто в силу обстоятельств или неопытности допустил несколько ДТП в течение страхового периода</p>
+
+</article>
+<br>
+<article>
+    <strong>Список предполагаемых мошенников</strong>
+    <p>Выберем из списка выше лиц, участвовавших в двух и более ДТП в рамках этого списка, т.е. между собой. Вероятно, это и будут мошенники:</p>
+
+
+
+    <div class="accordion" id="accordionExample2">
+    <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          Список
+
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample2">
+      <div class="card-body">
+        <pre>  {{ podozrevaemie }}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+    <p>Удалив дубликаты, мы сможем получить список предполагаемых мошенников:</p>
+
+    <ul>
+        {% for person in spisok_podozrev %}
+
+        <li>
+            {{ person }}
+        </li>
+        {% endfor%}
+
+    </ul>
+<br>
+<p>Информация о ДТП, в которых данные лица принимали участие:</p>
+        <div class="accordion" id="accordionExample3">
+    <div class="card">
+    <div class="card-header" id="headingThree">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+          Список
+
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample3">
+      <div class="card-body">
+        <pre>  {{ questionably_accs }}</pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</article>
+<br>
+
+
+{% endblock %}
