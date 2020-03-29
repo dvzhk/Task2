@@ -9,15 +9,12 @@ def task_two(default_csv):
     #для этого составляем общий список участников из одной колонки
     #
     traffic_accident_partip_one = traffic_accident_partip.iloc[:, 0]
-    print(traffic_accident_partip_one)
 
     traffic_accident_partip_two = traffic_accident_partip.iloc[:, 1]
-    print(traffic_accident_partip_two)
     #итоговый список:
     part_list = traffic_accident_partip_one.append(traffic_accident_partip_two).reset_index()
 
     more_than_one_time = part_list[part_list.iloc[:, 1].duplicated(keep=False)].sort_values(0)
-    print(more_than_one_time)
 
     #Ищем тех, из данного списка, кто участвовал в ДТП дважды и более между собой
     podozrevaemie = more_than_one_time[more_than_one_time.iloc[:, 0].duplicated(keep=False)]
