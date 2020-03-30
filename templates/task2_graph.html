@@ -98,7 +98,7 @@
         <div class="card-header">
             <img src="{{ url_for('static', filename=item[0]) }}" width="100%"></div>
             <div class="card-body">
-            <ol>
+            <ol start="0">
         {% for name in item[1] %}
                 <li>{{ name }}
                 </li>
