@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+ {% block title %}Задача 2 - Решение с использованием графов{% endblock %}
+
+
+{% block content %}
+{% if import_error == 1 %}
+<br>
+<div class="alert alert-warning" role="alert">
+  Ошибка импорта модулей networkx и/или matplotlib.pyplot. Используются заранее рассчитанные данные.
+</div>
+{% endif %}
+<br>
+    <h2>Решение задачи c использованием графов</h2>
+<article>
+
+<strong>Загрузка и предобработка файла данных</strong>
+    <p>
+        Загружаем данные из файла, указывая, что данные находятся в первых трех столбцах, индекс находится в первом столбце; указываем символ-разделитель, используемый в файле(","), а также используемую кодировку (Windows-1251).
+
+    </p>
+    <p>Вид таблицы:</p>
+    <pre>{{ preview }}</pre>
+
+</article>
+<br>
+<article>
+    <strong>Создаем ненаправленный граф из участников</strong>
+<p>Каждая пара участников образует ребро графа:</p>
+<div class="accordion" id="accordionExample">
+    <div class="card">
+    <div class="card-header" id="headingOne">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+          Список ребер графа(первые 10 позиций)
+        </button>
+      </h2>
+    </div>
+
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+      <div class="card-body">
+        {% for pair in pairs %}
+          <p>
+        {{ pair }}
+        </p>
+          {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+    <p></p>
+
+
+</article>
+
+
+<article>
+    <strong>Находим компоненты графа </strong>
+    <p>Отбираем компоненты с числом вешин  > 2.
+
+    </p>
+
+ <div class="accordion" id="accordionExample10">
+    <div class="card">
+    <div class="card-header" id="headingTen">
+      <h2 class="mb-0">
+        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseTen" aria-expanded="true" aria-controls="collapseTen">
+          Вершины компонент
+        </button>
+      </h2>
+    </div>
+
+<div id="collapseTen" class="collapse" aria-labelledby="headingTen" data-parent="#accordionExample10">
+      <div class="card-body">
+{% for component in components %}
+<p>
+    {% for name in component %}
+    {{ name }},
+    {% endfor %}
+</p>
+    {% endfor %}
+ </pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <p>Предполагаемые мошенники могут содержаться в данном списке, однако также здесь скорее всего присутствуют и те, кто в силу обстоятельств или неопытности допустил несколько ДТП в течение страхового периода</p>
+
+</article>
+<br>
+<article>
+    <strong>Строим графы компонент</strong>
+<br>
+<ol>
+    {% for item in plots_array %}<li></li>
+    <div class="card">
+        <div class="card-header">
+            <img src="{{ url_for('static', filename=item[0]) }}" width="100%"></div>
+            <div class="card-body">
+            <ol>
+        {% for name in item[1] %}
+                <li>{{ name }}
+                </li>
+           {% endfor %} </ol>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+</ol>
+    </ul>
+<br>
+    <strong>Вывод</strong>
+<p>Из данных графов наиболее вероятными мошенническими ДТП представляются графы с  циклическими связями (рис. 3 и 4).
+На остальных графах отражены скорее всего те, кто в силу обстоятельств или неопытности допустили несколько ДТП в течение страхового периода.
+
+</p>
+
+
+
+</article>
+<br>
+
+
+{% endblock %}
