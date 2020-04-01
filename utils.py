@@ -1,6 +1,11 @@
 import pandas as pd
 import os
 import random
+import pickle
+
+abspath = os.path.abspath(os.path.dirname(__file__))
+graph_path = 'graph'
+saved_data = "saved_data.obj"
 
 def make_edges(traffic_accident_partip):
     """Создание ребер для построения графа"""
@@ -17,15 +22,24 @@ def preprocessing(default_csv):
     return traffic_accident_partip
 
 
+def dump_load_obj(components=None, plots_array=None, dump=1):
+    if dump:
+        with open(os.path.join(abspath, graph_path, saved_data), "wb") as f:
+            pickle.dump((components, plots_array), f)
+    else:
+        with open(os.path.join(abspath, graph_path, saved_data), "rb") as f:
+            return pickle.load(f)
+
+
 def graph_process(traffic_accident_partip):
     """Решение с использованием графов"""
     preview = traffic_accident_partip.head()
     pairs = make_edges(traffic_accident_partip)
 
     try:
-
         import networkx
         import matplotlib.pyplot as plt
+        import_error = 0
 
         #Создаем ненаправленный граф
         graph = networkx.Graph()
@@ -39,8 +53,6 @@ def graph_process(traffic_accident_partip):
             subgraphs.append(graph.subgraph(i))
 
         #Подготовка графики и сохранение
-        abspath = os.path.abspath(os.path.dirname(__file__))
-        graph = 'static'
         plots_array = []
         for j, i in enumerate(subgraphs):
             fig = plt.figure(figsize=(6, 4), dpi=75)
@@ -48,31 +60,20 @@ def graph_process(traffic_accident_partip):
             labels = {x: y for x,y in zip(components[j], range(len(components[j])))}
             networkx.draw_spring(i, with_labels=True, font_size=12, labels=labels, font_color='white')
             #plt.show()
-            print("labels:", labels)
+            #print("labels:", labels)
             img_name = f"Graph{j}.svg"
-            img_path = os.path.join(abspath, graph, img_name)
+            img_path = os.path.join(abspath, graph_path, img_name)
             fig.savefig(img_path, format="svg", transparent=False)
             plots_array.append((img_name, labels))
-        import_error = 0
+
+        dump_load_obj(components, plots_array)
+
 
     except ImportError:
         #Блок выполняется в отсутствие установленных модулей
         import_error = 1
-        components = {}
-        plots_array = [('Graph0.svg',
-                        {'Галкина Елена Тарасовна': 0, 'Дорофеева Гулия Николаевна': 1,
-                         'Миронов Пётр Александрович': 2, 'Пахомов Анатолий Васильевич': 3,
-                         'Елисеева Сати Вячеславовна': 4, 'Шубин Всеволод Валерьевич': 5}),
-                       ('Graph1.svg', {'Котова Виктория Архиповна': 0, 'Цветков Валерий Ростиславович': 1,
-                                       'Петухова Медина Максимовна': 2, 'Королева Радмила Олеговна': 3}),
-                       ('Graph2.svg', {'Мухамадеев Александр Валерьевич': 0, 'Сенчукова Екатерина Семеновна': 1,
-                                       'Коробов Вадим Александрович': 2, 'Рогачев Антон Владимирович': 3}),
-                       ('Graph3.svg', {'Воробьев Иван Александрович': 0, 'Павлова Мария Геннадиевна': 1,
-                                       'Комин Сергей Николаевич': 2}),
-                       ('Graph4.svg', {'Стрелков Евгений Егорович': 0, 'Александрова Лариса Евгеньевна': 1,
-                                       'Силина Радмила Викторовна': 2}),
-                       ('Graph5.svg', {'Архипова Анна Игоревна': 0, 'Суворов Илья Макарович': 1,
-                                       'Федотов Ростислав Богуславович': 2, 'Мамонтов Мстислав Георгиевич': 3})]
+        components, plots_array = dump_load_obj(dump=0)
+
     #для устранения кеширования изображений
     tail = '?' + str(random.randint(1111, 9999))
 
