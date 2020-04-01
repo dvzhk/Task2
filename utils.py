@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import random
 
 def make_edges(traffic_accident_partip):
     """Создание ребер для построения графа"""
@@ -47,7 +48,7 @@ def graph_process(traffic_accident_partip):
             labels = {x: y for x,y in zip(components[j], range(len(components[j])))}
             networkx.draw_spring(i, with_labels=True, font_size=12, labels=labels, font_color='white')
             #plt.show()
-
+            print("labels:", labels)
             img_name = f"Graph{j}.svg"
             img_path = os.path.join(abspath, graph, img_name)
             fig.savefig(img_path, format="svg", transparent=False)
@@ -72,12 +73,15 @@ def graph_process(traffic_accident_partip):
                                        'Силина Радмила Викторовна': 2}),
                        ('Graph5.svg', {'Архипова Анна Игоревна': 0, 'Суворов Илья Макарович': 1,
                                        'Федотов Ростислав Богуславович': 2, 'Мамонтов Мстислав Георгиевич': 3})]
+    #для устранения кеширования изображений
+    tail = '?' + str(random.randint(1111, 9999))
 
     return {'import_error': import_error,
             'preview': preview,
             'pairs': pairs[:10],
             'components': components,
-            'plots_array': plots_array}
+            'plots_array': plots_array,
+            'tail': tail}
 
 
 def task_two(traffic_accident_partip):
